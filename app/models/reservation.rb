@@ -26,6 +26,9 @@ class Reservation < ApplicationRecord
     if !within_timeframe
       self.errors.add(:start_date, "No reservation for unavailable apartment")
     end
+    # unless self.listing.bookings.where("start_date <= ? AND end_date >= ?", "self.start_date", "self.end_date")
+    #   self.errors.add(:start_date, "No reservation for unavailable apartment")
+    # end
   end
 
   def no_reservation_conflict?
@@ -33,10 +36,19 @@ class Reservation < ApplicationRecord
     self.listing.reservations.each do |reservation|
       if self.start_date >= reservation.start_date && self.start_date <= reservation.end_date
         reservation_conflict = true
+      elsif self.end_date >= reservation.start_date && self.end_date <= reservation.end_date
+        reservation_conflict = true
       end
     end
     if reservation_conflict
       self.errors.add(:start_date, "There is another reservation for these dates.")
     end
+    # binding.pry
+    # if self.listing.reservations.where("start_date <= ? AND end_date >= ?",  "self.start_date", "self.start_date").count > 0
+    #   self.errors.add(:start_date, "There is another reservation for these dates.")
+    # end
+    # if self.listing.reservations.where("start_date <= ? AND end_date >= ?", "self.end_date", "self.end_date").count > 0
+    #   self.errors.add(:start_date, "There is another reservation for these dates.")
+    # end
   end
 end
