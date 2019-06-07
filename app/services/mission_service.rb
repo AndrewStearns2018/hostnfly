@@ -40,6 +40,34 @@ module MissionService
       return checkout_mission
     end
 
+    def checkout_checkin(params)
+      checkout = Mission.find_by(
+        listing: find_listing(params),
+        mission_type: "last_checkout",
+        date: params[:end_date])
+
+      if checkout.nil?
+        checkout_checkin = Mission.new(
+          mission_type: "checkout_checkin",
+          date: params[:end_date],
+          price: "#{10 * find_listing(params).num_rooms}",
+          listing: find_listing(params)
+          )
+        return checkout_checkin.save
+      end
+    end
+
+    def find_checkout_checkin(params)
+      reservation = Reservation.find(params[:id])
+      listing = reservation.listing
+      checkout_checkin = Mission.find_by(
+        listing: listing,
+        mission_type: "checkout_checkin",
+        date: reservation.end_date
+        )
+      return checkout_checkin
+    end
+
     def find_listing(params)
       Listing.find(params[:listing_id])
     end

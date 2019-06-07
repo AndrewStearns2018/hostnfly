@@ -31,12 +31,12 @@ booking_1.save!
 
 puts "Created booking"
 
-# reservation_1 = Reservation.new(
-#   listing: Listing.first,
-#   start_date: Date.new(2019, 01, 01),
-#   end_date: Date.new(2019, 01, 05)
-#   )
+reservation_1 = Reservation.new(
+  listing: Listing.first,
+  start_date: Date.new(2019, 01, 01),
+  end_date: Date.new(2019, 01, 05)
+  )
 
-# reservation_1.save!
+reservation_1.save!
 
 puts "DONE"
